@@ -56,9 +56,6 @@ src/
 Las respuestas escritas del trabajo (Partes A a F) están en [`RESPUESTAS.md`](./RESPUESTAS.md).
 
 ---
-
-## Captura
-
 <p align="center">
   <img src="./capturas/sticker.png" alt="Captura de la app">
 </p>
