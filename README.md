@@ -60,9 +60,3 @@ Las respuestas escritas del trabajo (Partes A a F) están en [`RESPUESTAS.md`](.
 ## Captura
 
 ![Captura de la app](./capturas/sticker.png)
-
----
-
-## Para entregar (pendiente)
-
-- [ ] Agregar capturas (o un video corto) de la app funcionando: carrito con deshacer, turno, cocina atendiendo, inicio de sesión y pantalla 404.
