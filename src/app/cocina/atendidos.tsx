@@ -1,8 +1,10 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 import { DondeEstoy } from '@/components/DondeEstoy';
 import { useApp, type Pedido } from '@/context/AppContext';
 import { formatearPrecio } from '@/data/platos';
+import { estilosComunes, tema } from '@/constantes/tema';
 
 export default function Atendidos() {
   const { atendidosPila } = useApp();
@@ -16,9 +18,14 @@ export default function Atendidos() {
       keyExtractor={(pedido: Pedido) => String(pedido.numero)}
       renderItem={({ item }) => (
         <View style={styles.tarjeta}>
-          <Text style={styles.numero}>
-            Turno #{item.numero} · {item.hora}
-          </Text>
+          <View style={styles.encabezado}>
+            <View style={styles.bolita}>
+              <Ionicons name="checkmark" size={16} color={tema.colores.exito} />
+            </View>
+            <Text style={styles.numero}>
+              Turno #{item.numero} · {item.hora}
+            </Text>
+          </View>
           <Text style={styles.total}>Total: {formatearPrecio(item.total)}</Text>
           {item.nota ? <Text style={styles.nota}>Nota: {item.nota}</Text> : null}
         </View>
@@ -35,41 +42,55 @@ export default function Atendidos() {
 const styles = StyleSheet.create({
   lista: {
     flex: 1,
+    backgroundColor: tema.colores.fondo,
   },
   contenido: {
-    padding: 16,
+    padding: 20,
+    paddingBottom: 32,
     gap: 10,
   },
   titulo: {
     fontSize: 22,
-    fontWeight: '700',
+    fontWeight: '800',
+    color: tema.colores.texto,
     marginBottom: 4,
   },
   tarjeta: {
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#e5e5e5',
+    ...estilosComunes.tarjeta,
+    padding: 16,
+    gap: 6,
+  },
+  encabezado: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  bolita: {
+    width: 26,
+    height: 26,
     borderRadius: 10,
-    padding: 14,
-    gap: 4,
+    backgroundColor: tema.colores.exitoSuave,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   numero: {
     fontSize: 16,
     fontWeight: '700',
+    color: tema.colores.texto,
   },
   total: {
     fontSize: 15,
-    color: '#15803d',
+    color: tema.colores.exito,
     fontWeight: '600',
   },
   nota: {
     fontSize: 13,
     fontStyle: 'italic',
-    color: '#555',
+    color: tema.colores.textoSuave,
   },
   vacio: {
     fontSize: 15,
-    color: '#666',
+    color: tema.colores.textoSuave,
     textAlign: 'center',
     marginVertical: 24,
   },

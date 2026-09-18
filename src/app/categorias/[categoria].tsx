@@ -4,6 +4,7 @@ import { FlatList, Pressable, StyleSheet, Text } from 'react-native';
 import { DondeEstoy } from '@/components/DondeEstoy';
 import { PlatoCard } from '@/components/PlatoCard';
 import { categoriaPorSlug, platosDeCategoria } from '@/data/platos';
+import { tema } from '@/constantes/tema';
 
 export default function Categoria() {
   const { categoria } = useLocalSearchParams<{ categoria: string }>();
@@ -44,8 +45,10 @@ export default function Categoria() {
         style={styles.lista}
         contentContainerStyle={styles.contenido}
         data={platos}
+        numColumns={2}
+        columnWrapperStyle={styles.columnas}
         keyExtractor={(plato) => String(plato.id)}
-        renderItem={({ item }) => <PlatoCard plato={item} />}
+        renderItem={({ item, index }) => <PlatoCard plato={item} indice={index} />}
         ListHeaderComponent={<Text style={styles.titulo}>Platos de {info.nombre}</Text>}
         ListFooterComponent={<DondeEstoy />}
       />
@@ -56,25 +59,32 @@ export default function Categoria() {
 const styles = StyleSheet.create({
   lista: {
     flex: 1,
+    backgroundColor: tema.colores.fondo,
   },
   contenido: {
-    padding: 16,
-    gap: 8,
+    padding: 20,
+    paddingBottom: 32,
+    gap: 12,
+  },
+  columnas: {
+    gap: 12,
   },
   titulo: {
-    fontSize: 20,
-    fontWeight: '700',
-    marginBottom: 8,
+    fontSize: 22,
+    fontWeight: '800',
+    color: tema.colores.texto,
+    marginBottom: 2,
   },
   error: {
-    fontSize: 16,
-    color: '#b91c1c',
+    fontSize: 15,
+    color: tema.colores.peligro,
+    lineHeight: 21,
     marginBottom: 16,
   },
   boton: {
-    backgroundColor: '#15803d',
-    padding: 15,
-    borderRadius: 12,
+    backgroundColor: tema.colores.acento,
+    borderRadius: tema.radios.medio,
+    paddingVertical: 14,
     alignItems: 'center',
   },
   textoBoton: {

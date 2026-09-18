@@ -1,9 +1,11 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 import { DondeEstoy } from '@/components/DondeEstoy';
 import { CLAVE_COCINA, USUARIO_COCINA, useApp } from '@/context/AppContext';
+import { estilosComunes, tema } from '@/constantes/tema';
 
 export default function Login() {
   const { iniciarSesion } = useApp();
@@ -22,33 +24,49 @@ export default function Login() {
 
   return (
     <ScrollView contentContainerStyle={styles.contenedor} keyboardShouldPersistTaps="handled">
-      <Text style={styles.titulo}>Ingreso del personal de cocina</Text>
+      <View style={styles.icono}>
+        <Ionicons name="flame" size={30} color={tema.colores.acento} />
+      </View>
+      <Text style={styles.titulo}>Acceso a la cocina</Text>
       <Text style={styles.ayuda}>
-        Usuario: {USUARIO_COCINA} · Clave: {CLAVE_COCINA}
+        Zona restringida al personal del comedor. Usuario: {USUARIO_COCINA} · Clave:{' '}
+        {CLAVE_COCINA}
       </Text>
 
-      <TextInput
-        style={styles.input}
-        value={usuarioIngresado}
-        onChangeText={setUsuarioIngresado}
-        placeholder="Usuario"
-        autoCapitalize="none"
-        autoCorrect={false}
-      />
-      <TextInput
-        style={styles.input}
-        value={clave}
-        onChangeText={setClave}
-        placeholder="Clave"
-        secureTextEntry
-        autoCapitalize="none"
-      />
+      <View style={styles.formulario}>
+        <TextInput
+          style={styles.input}
+          value={usuarioIngresado}
+          onChangeText={setUsuarioIngresado}
+          placeholder="Usuario"
+          placeholderTextColor={tema.colores.textoSuave}
+          autoCapitalize="none"
+          autoCorrect={false}
+        />
+        <TextInput
+          style={styles.input}
+          value={clave}
+          onChangeText={setClave}
+          placeholder="Clave"
+          placeholderTextColor={tema.colores.textoSuave}
+          secureTextEntry
+          autoCapitalize="none"
+        />
 
-      {error ? <Text style={styles.error}>{error}</Text> : null}
+        {error ? (
+          <View style={styles.errorCaja}>
+            <Ionicons name="alert-circle" size={16} color={tema.colores.peligro} />
+            <Text style={styles.error}>{error}</Text>
+          </View>
+        ) : null}
 
-      <Pressable style={({ pressed }) => [styles.boton, pressed && styles.presionado]} onPress={entrar}>
-        <Text style={styles.textoBoton}>Ingresar</Text>
-      </Pressable>
+        <Pressable
+          style={({ pressed }) => [styles.boton, pressed && styles.presionado]}
+          onPress={entrar}
+        >
+          <Text style={styles.textoBoton}>Ingresar</Text>
+        </Pressable>
+      </View>
 
       <View style={styles.ayudaFlujo}>
         <Text style={styles.ayudaFlujoTexto}>
@@ -64,52 +82,86 @@ export default function Login() {
 
 const styles = StyleSheet.create({
   contenedor: {
-    padding: 16,
+    padding: 24,
     gap: 12,
+    alignItems: 'center',
+    backgroundColor: tema.colores.fondo,
+  },
+  icono: {
+    width: 64,
+    height: 64,
+    borderRadius: 22,
+    backgroundColor: tema.colores.acentoSuave,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 4,
   },
   titulo: {
     fontSize: 22,
-    fontWeight: '700',
+    fontWeight: '800',
+    color: tema.colores.texto,
+    textAlign: 'center',
   },
   ayuda: {
     fontSize: 13,
-    color: '#777',
+    color: tema.colores.textoSuave,
+    textAlign: 'center',
+    lineHeight: 19,
+  },
+  formulario: {
+    width: '100%',
+    ...estilosComunes.tarjeta,
+    padding: 16,
+    gap: 10,
+    marginTop: 8,
   },
   input: {
+    backgroundColor: tema.colores.fondo,
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 10,
-    padding: 12,
+    borderColor: tema.colores.borde,
+    borderRadius: tema.radios.suave,
+    padding: 13,
     fontSize: 15,
-    color: '#333',
+    color: tema.colores.texto,
+  },
+  errorCaja: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: tema.colores.peligroSuave,
+    borderRadius: tema.radios.suave,
+    padding: 10,
+  },
+  error: {
+    color: tema.colores.peligro,
+    fontSize: 13,
+    flex: 1,
   },
   boton: {
-    backgroundColor: '#15803d',
-    padding: 16,
-    borderRadius: 12,
+    backgroundColor: tema.colores.acento,
+    borderRadius: tema.radios.medio,
+    paddingVertical: 15,
     alignItems: 'center',
+    marginTop: 2,
   },
   presionado: {
-    opacity: 0.8,
+    opacity: 0.86,
   },
   textoBoton: {
     color: '#fff',
     fontSize: 16,
     fontWeight: '700',
   },
-  error: {
-    color: '#b91c1c',
-    fontSize: 14,
-  },
   ayudaFlujo: {
-    backgroundColor: '#f3f4f6',
+    borderWidth: 1,
+    borderColor: tema.colores.borde,
+    borderRadius: tema.radios.suave,
     padding: 12,
-    borderRadius: 8,
-    marginTop: 8,
+    width: '100%',
   },
   ayudaFlujoTexto: {
     fontSize: 13,
-    color: '#555',
+    color: tema.colores.textoSuave,
     lineHeight: 18,
   },
 });

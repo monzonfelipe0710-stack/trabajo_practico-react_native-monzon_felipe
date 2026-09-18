@@ -2,13 +2,29 @@ import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router/js-tabs';
 
 import { useApp } from '@/context/AppContext';
+import { tema } from '@/constantes/tema';
 
 export default function TabsLayout() {
   const { cantidadCarrito } = useApp();
   const cantidad = cantidadCarrito();
 
   return (
-    <Tabs screenOptions={{ headerShown: false, tabBarActiveTintColor: '#15803d' }}>
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: tema.colores.acento,
+        tabBarInactiveTintColor: tema.colores.textoSuave,
+        tabBarStyle: {
+          backgroundColor: tema.colores.superficie,
+          borderTopColor: tema.colores.borde,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: '700',
+        },
+        animation: 'fade',
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{

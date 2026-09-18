@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { useLocalSearchParams, usePathname, useSegments } from 'expo-router';
 
+import { tema } from '@/constantes/tema';
+
 const DEBUG = true;
 
 export function DondeEstoy() {
@@ -12,7 +14,7 @@ export function DondeEstoy() {
 
   return (
     <View style={styles.contenedor}>
-      <Text style={styles.titulo}>¿Dónde estoy?</Text>
+      <Text style={styles.etiqueta}>¿Dónde estoy?</Text>
       <Text style={styles.linea}>usePathname(): {pathname}</Text>
       <Text style={styles.linea}>useSegments(): {JSON.stringify(segments)}</Text>
       <Text style={styles.linea}>
@@ -25,19 +27,24 @@ export function DondeEstoy() {
 const styles = StyleSheet.create({
   contenedor: {
     borderWidth: 1,
-    borderColor: '#d0d0d0',
-    borderRadius: 8,
-    padding: 10,
-    marginTop: 24,
-    backgroundColor: '#f6f6f6',
-    gap: 4,
+    borderColor: tema.colores.borde,
+    borderRadius: tema.radios.suave,
+    padding: 12,
+    marginTop: 20,
+    backgroundColor: tema.colores.superficie,
+    gap: 3,
   },
-  titulo: {
+  etiqueta: {
     fontWeight: '700',
-    fontSize: 13,
+    fontSize: 11,
+    letterSpacing: 0.8,
+    textTransform: 'uppercase',
+    color: tema.colores.textoSuave,
+    marginBottom: 2,
   },
   linea: {
     fontFamily: 'monospace',
     fontSize: 12,
+    color: tema.colores.textoSuave,
   },
 });

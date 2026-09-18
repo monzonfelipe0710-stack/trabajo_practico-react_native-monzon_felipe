@@ -16,7 +16,11 @@ export type Plato = {
   precio: number;
   categoria: string;
   descripcion: string;
+  imagen: string;
+  emoji: string;
 };
+
+const IMG = (tag: string) => `https://loremflickr.com/480/480/${tag}?lock=1`;
 
 export const PLATOS: Plato[] = [
   {
@@ -25,6 +29,8 @@ export const PLATOS: Plato[] = [
     precio: 450,
     categoria: 'desayuno',
     descripcion: 'Tres medialunas de manteca recién horneadas.',
+    imagen: IMG('croissant,breakfast'),
+    emoji: '🥐',
   },
   {
     id: 2,
@@ -32,6 +38,8 @@ export const PLATOS: Plato[] = [
     precio: 900,
     categoria: 'desayuno',
     descripcion: 'Pan de miga tostado con jamón y queso, con café incluido.',
+    imagen: IMG('toast,sandwich'),
+    emoji: '🥪',
   },
   {
     id: 3,
@@ -39,6 +47,8 @@ export const PLATOS: Plato[] = [
     precio: 500,
     categoria: 'desayuno',
     descripcion: 'Café cortado con leche, servido bien caliente.',
+    imagen: IMG('latte,coffee'),
+    emoji: '☕',
   },
   {
     id: 4,
@@ -46,6 +56,8 @@ export const PLATOS: Plato[] = [
     precio: 600,
     categoria: 'desayuno',
     descripcion: 'Licuado de banana con leche, sin azúcar añadida.',
+    imagen: IMG('banana,smoothie'),
+    emoji: '🥤',
   },
   {
     id: 5,
@@ -53,6 +65,8 @@ export const PLATOS: Plato[] = [
     precio: 2800,
     categoria: 'almuerzo',
     descripcion: 'Milanesa de carne con puré de papas y ensalada.',
+    imagen: IMG('schnitzel,potato'),
+    emoji: '🍛',
   },
   {
     id: 6,
@@ -60,6 +74,8 @@ export const PLATOS: Plato[] = [
     precio: 1800,
     categoria: 'almuerzo',
     descripcion: 'Fideos cabello de ángel con salsa de tomate casera.',
+    imagen: IMG('spaghetti,tomato'),
+    emoji: '🍝',
   },
   {
     id: 7,
@@ -67,6 +83,8 @@ export const PLATOS: Plato[] = [
     precio: 1600,
     categoria: 'almuerzo',
     descripcion: 'Dos empanadas de carne cortada a cuchillo.',
+    imagen: IMG('empanada,pastry'),
+    emoji: '🥟',
   },
   {
     id: 8,
@@ -74,6 +92,8 @@ export const PLATOS: Plato[] = [
     precio: 2200,
     categoria: 'almuerzo',
     descripcion: 'Guiso de lentejas con chorizo, calabaza y papa.',
+    imagen: IMG('lentil,soup'),
+    emoji: '🍲',
   },
   {
     id: 9,
@@ -81,6 +101,8 @@ export const PLATOS: Plato[] = [
     precio: 700,
     categoria: 'bebidas',
     descripcion: 'Botella de agua mineral sin gas, bien fría.',
+    imagen: IMG('water,bottle'),
+    emoji: '💧',
   },
   {
     id: 10,
@@ -88,6 +110,8 @@ export const PLATOS: Plato[] = [
     precio: 900,
     categoria: 'bebidas',
     descripcion: 'Gaseosa de cola o lima en botella descartable.',
+    imagen: IMG('cola,drink'),
+    emoji: '🥤',
   },
   {
     id: 11,
@@ -95,6 +119,8 @@ export const PLATOS: Plato[] = [
     precio: 800,
     categoria: 'bebidas',
     descripcion: 'Jugo de naranja exprimido en el momento.',
+    imagen: IMG('orange,juice'),
+    emoji: '🍹',
   },
   {
     id: 12,
@@ -102,6 +128,8 @@ export const PLATOS: Plato[] = [
     precio: 600,
     categoria: 'kiosco',
     descripcion: 'Barrita de chocolate con oblea crocante.',
+    imagen: IMG('chocolate,bar'),
+    emoji: '🍫',
   },
   {
     id: 13,
@@ -109,6 +137,8 @@ export const PLATOS: Plato[] = [
     precio: 700,
     categoria: 'kiosco',
     descripcion: 'Papas fritas de bolsa, variedad corte americano.',
+    imagen: IMG('french,fries'),
+    emoji: '🍟',
   },
   {
     id: 14,
@@ -116,8 +146,17 @@ export const PLATOS: Plato[] = [
     precio: 500,
     categoria: 'kiosco',
     descripcion: 'Alfajor clásico con dulce de leche y cobertura de chocolate.',
+    imagen: IMG('cookie,chocolate'),
+    emoji: '🍪',
   },
 ];
+
+export const COLORES_CATEGORIA: Record<string, string> = {
+  desayuno: '#FDF3E3',
+  almuerzo: '#ECF5EC',
+  bebidas: '#EAF2FA',
+  kiosco: '#F6EFF4',
+};
 
 export function platoPorId(id: number): Plato | undefined {
   return PLATOS.find((p) => p.id === id);
@@ -125,6 +164,10 @@ export function platoPorId(id: number): Plato | undefined {
 
 export function categoriaPorSlug(slug: string): Categoria | undefined {
   return CATEGORIAS.find((c) => c.slug === slug);
+}
+
+export function tipoCategoria(slug: string): string {
+  return categoriaPorSlug(slug)?.nombre ?? slug;
 }
 
 export function platosDeCategoria(slug: string): Plato[] {

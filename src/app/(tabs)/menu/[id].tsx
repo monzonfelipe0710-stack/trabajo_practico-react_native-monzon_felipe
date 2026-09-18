@@ -1,9 +1,13 @@
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { Alert, Pressable, ScrollView, StyleSheet, Text } from 'react-native';
+import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { DondeEstoy } from '@/components/DondeEstoy';
+import { PlatoImagen } from '@/components/PlatoImagen';
 import { useApp } from '@/context/AppContext';
-import { formatearPrecio, platoPorId } from '@/data/platos';
+import { formatearPrecio, platoPorId, tipoCategoria } from '@/data/platos';
+import { estilosComunes, tema } from '@/constantes/tema';
 
 export default function DetallePlato() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -15,7 +19,7 @@ export default function DetallePlato() {
     return (
       <>
         <Stack.Screen options={{ title: 'Plato' }} />
-        <ScrollView contentContainerStyle={styles.contenedor}>
+        <ScrollView contentContainerStyle={styles.contenido}>
           <Text style={styles.error}>No existe el plato {String(id)}.</Text>
           <Pressable style={styles.botonSecundario} onPress={() => router.navigate('/menu')}>
             <Text style={styles.textoSecundario}>Volver al menú</Text>
@@ -28,80 +32,141 @@ export default function DetallePlato() {
 
   return (
     <>
-      <Stack.Screen options={{ title: plato.nombre }} />
-      <ScrollView contentContainerStyle={styles.contenedor}>
-        <Text style={styles.nombre}>{plato.nombre}</Text>
-        <Text style={styles.precio}>{formatearPrecio(plato.precio)}</Text>
-        <Text style={styles.descripcion}>{plato.descripcion}</Text>
-        <Text style={styles.categoria}>Categoría: {plato.categoria}</Text>
+      <Stack.Screen options={{ title: '' }} />
+      <ScrollView
+        style={styles.fondo}
+        contentContainerStyle={styles.contenido}
+        showsVerticalScrollIndicator={false}
+      >
+        <PlatoImagen
+          uri={plato.imagen}
+          emoji={plato.emoji}
+          categoria={plato.categoria}
+          estilo={styles.imagen}
+        />
 
-        <Pressable
-          style={({ pressed }) => [styles.boton, pressed && styles.presionado]}
-          onPress={() => {
-            agregarAlCarrito(plato);
-            Alert.alert('Agregado', `${plato.nombre} se agregó al carrito.`);
-          }}
-        >
-          <Text style={styles.textoBoton}>Agregar al carrito</Text>
-        </Pressable>
+        <Animated.View entering={FadeInDown.duration(320).delay(80)} style={styles.cuerpo}>
+          <View style={styles.encabezado}>
+            <Text style={styles.categoria}>{tipoCategoria(plato.categoria)}</Text>
+            <Text style={styles.nombre}>{plato.nombre}</Text>
+            <Text style={styles.descripcion}>{plato.descripcion}</Text>
+          </View>
 
-        <DondeEstoy />
+          <View style={styles.precioRow}>
+            <Text style={styles.precio}>Precio</Text>
+            <Text style={styles.precioNumero}>{formatearPrecio(plato.precio)}</Text>
+          </View>
+
+          <Pressable
+            style={({ pressed }) => [styles.boton, pressed && styles.presionado]}
+            onPress={() => {
+              agregarAlCarrito(plato);
+              Alert.alert('Listo', `${plato.nombre} se agregó a tu carrito.`);
+            }}
+          >
+            <Ionicons name="add-circle-outline" size={20} color="#fff" />
+            <Text style={styles.textoBoton}>Agregar al carrito</Text>
+          </Pressable>
+
+          <DondeEstoy />
+        </Animated.View>
       </ScrollView>
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  contenedor: {
-    padding: 16,
-    gap: 12,
+  fondo: {
+    flex: 1,
+    backgroundColor: tema.colores.fondo,
+  },
+  contenido: {
+    paddingBottom: 40,
+  },
+  imagen: {
+    width: '100%',
+    height: 300,
+  },
+  cuerpo: {
+    marginTop: -28,
+    backgroundColor: tema.colores.fondo,
+    borderTopLeftRadius: tema.radios.grande,
+    borderTopRightRadius: tema.radios.grande,
+    padding: 20,
+    gap: 18,
+  },
+  encabezado: {
+    gap: 4,
+  },
+  categoria: {
+    fontSize: 12,
+    fontWeight: '800',
+    letterSpacing: 1.2,
+    textTransform: 'uppercase',
+    color: tema.colores.acento,
   },
   nombre: {
     fontSize: 26,
-    fontWeight: '700',
-  },
-  precio: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#15803d',
+    fontWeight: '800',
+    color: tema.colores.texto,
+    letterSpacing: -0.4,
   },
   descripcion: {
     fontSize: 15,
-    color: '#444',
+    color: tema.colores.textoSuave,
     lineHeight: 22,
+    marginTop: 4,
   },
-  categoria: {
-    fontSize: 13,
-    color: '#777',
+  precioRow: {
+    ...estilosComunes.tarjeta,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 16,
+  },
+  precio: {
+    fontSize: 14,
+    color: tema.colores.textoSuave,
+  },
+  precioNumero: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: tema.colores.acento,
   },
   boton: {
-    backgroundColor: '#15803d',
-    padding: 16,
-    borderRadius: 12,
+    backgroundColor: tema.colores.acento,
+    borderRadius: tema.radios.medio,
+    paddingVertical: 16,
+    flexDirection: 'row',
     alignItems: 'center',
-  },
-  botonSecundario: {
-    backgroundColor: '#e5e5e5',
-    padding: 14,
-    borderRadius: 12,
-    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
   },
   presionado: {
-    opacity: 0.8,
+    opacity: 0.86,
+    transform: [{ scale: 0.99 }],
   },
   textoBoton: {
     color: '#fff',
     fontSize: 16,
     fontWeight: '700',
   },
+  botonSecundario: {
+    backgroundColor: tema.colores.superficie,
+    borderWidth: 1,
+    borderColor: tema.colores.borde,
+    padding: 14,
+    borderRadius: tema.radios.suave,
+    alignItems: 'center',
+  },
   textoSecundario: {
-    color: '#333',
+    color: tema.colores.texto,
     fontSize: 15,
     fontWeight: '600',
   },
   error: {
     fontSize: 18,
-    color: '#b91c1c',
+    color: tema.colores.peligro,
     marginBottom: 16,
   },
 });

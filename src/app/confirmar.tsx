@@ -1,9 +1,12 @@
 import { Link, useRouter } from 'expo-router';
-import { Pressable, ScrollView, StyleSheet, Text } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { DondeEstoy } from '@/components/DondeEstoy';
 import { useApp } from '@/context/AppContext';
 import { formatearPrecio } from '@/data/platos';
+import { estilosComunes, tema } from '@/constantes/tema';
 
 export default function Confirmar() {
   const { carrito, nota, totalCarrito, confirmarPedido } = useApp();
@@ -17,7 +20,7 @@ export default function Confirmar() {
 
   if (carrito.length === 0) {
     return (
-      <ScrollView contentContainerStyle={styles.contenedor}>
+      <ScrollView contentContainerStyle={styles.contenido}>
         <Text style={styles.error}>No hay nada para confirmar. Tu carrito está vacío.</Text>
         <Link href="/menu" asChild>
           <Pressable style={styles.boton}>
@@ -30,21 +33,51 @@ export default function Confirmar() {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.contenedor}>
-      <Text style={styles.titulo}>Resumen de tu pedido</Text>
-
-      {carrito.map((item) => (
-        <Text key={item.plato.id} style={styles.linea}>
-          {item.cantidad} × {item.plato.nombre} — {formatearPrecio(item.plato.precio * item.cantidad)}
+    <ScrollView style={styles.fondo} contentContainerStyle={styles.contenido}>
+      <Animated.View entering={FadeInDown.duration(280)}>
+        <Text style={styles.titulo}>Revisá tu pedido</Text>
+        <Text style={styles.subtitulo}>
+          Paso final antes de pasar a la cocina. Confirmá y te damos tu turno.
         </Text>
-      ))}
+      </Animated.View>
 
-      {nota ? <Text style={styles.nota}>Nota para la cocina: {nota}</Text> : null}
+      <View style={styles.listaItems}>
+        {carrito.map((item, indice) => (
+          <View key={item.plato.id} style={styles.fila}>
+            <View style={styles.filaNumero}>
+              <Text style={styles.filaNumeroTexto}>{indice + 1}</Text>
+            </View>
+            <View style={styles.filaTexto}>
+              <Text style={styles.nombre}>{item.plato.nombre}</Text>
+              <Text style={styles.subtotal}>
+                {item.cantidad} × {formatearPrecio(item.plato.precio)}
+              </Text>
+            </View>
+            <Text style={styles.filaPrecio}>
+              {formatearPrecio(item.plato.precio * item.cantidad)}
+            </Text>
+          </View>
+        ))}
 
-      <Text style={styles.total}>Total: {formatearPrecio(totalCarrito())}</Text>
+        {nota ? (
+          <View style={styles.nota}>
+            <Ionicons name="chatbubble-ellipses-outline" size={16} color={tema.colores.textoSuave} />
+            <Text style={styles.notaTexto}>{nota}</Text>
+          </View>
+        ) : null}
 
-      <Pressable onPress={confirmar} style={({ pressed }) => [styles.boton, pressed && styles.presionado]}>
-        <Text style={styles.textoBoton}>Confirmar</Text>
+        <View style={styles.totalRow}>
+          <Text style={styles.totalTexto}>Total</Text>
+          <Text style={styles.totalNumero}>{formatearPrecio(totalCarrito())}</Text>
+        </View>
+      </View>
+
+      <Pressable
+        onPress={confirmar}
+        style={({ pressed }) => [styles.boton, pressed && styles.presionado]}
+      >
+        <Ionicons name="checkmark-circle-outline" size={20} color="#fff" />
+        <Text style={styles.textoBoton}>Confirmar pedido</Text>
       </Pressable>
 
       <DondeEstoy />
@@ -53,40 +86,114 @@ export default function Confirmar() {
 }
 
 const styles = StyleSheet.create({
-  contenedor: {
-    padding: 16,
-    gap: 10,
+  fondo: {
+    flex: 1,
+    backgroundColor: tema.colores.fondo,
+  },
+  contenido: {
+    padding: 20,
+    paddingBottom: 32,
+    gap: 14,
   },
   titulo: {
-    fontSize: 22,
-    fontWeight: '700',
+    fontSize: 26,
+    fontWeight: '800',
+    color: tema.colores.texto,
+    letterSpacing: -0.5,
   },
-  linea: {
+  subtitulo: {
+    fontSize: 14,
+    color: tema.colores.textoSuave,
+    lineHeight: 20,
+    marginTop: 4,
+  },
+  listaItems: {
+    ...estilosComunes.tarjeta,
+    padding: 16,
+    gap: 12,
+    marginTop: 4,
+  },
+  fila: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  filaNumero: {
+    width: 26,
+    height: 26,
+    borderRadius: 9,
+    backgroundColor: tema.colores.acentoSuave,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  filaNumeroTexto: {
+    fontSize: 13,
+    fontWeight: '800',
+    color: tema.colores.acento,
+  },
+  filaTexto: {
+    flex: 1,
+    gap: 1,
+  },
+  nombre: {
     fontSize: 15,
-    color: '#333',
+    fontWeight: '600',
+    color: tema.colores.texto,
+  },
+  subtotal: {
+    fontSize: 13,
+    color: tema.colores.textoSuave,
+  },
+  filaPrecio: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: tema.colores.texto,
   },
   nota: {
-    fontSize: 14,
-    fontStyle: 'italic',
-    color: '#555',
-    backgroundColor: '#fef9c3',
-    padding: 10,
-    borderRadius: 8,
+    flexDirection: 'row',
+    gap: 8,
+    alignItems: 'center',
+    backgroundColor: tema.colores.acentoSuave,
+    borderRadius: tema.radios.suave,
+    padding: 12,
   },
-  total: {
-    fontSize: 20,
+  notaTexto: {
+    flex: 1,
+    fontSize: 13,
+    color: tema.colores.texto,
+    lineHeight: 18,
+  },
+  totalRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: tema.colores.borde,
+    paddingTop: 14,
+  },
+  totalTexto: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: tema.colores.texto,
+  },
+  totalNumero: {
+    fontSize: 24,
     fontWeight: '800',
-    color: '#15803d',
+    color: tema.colores.acento,
   },
   boton: {
-    backgroundColor: '#15803d',
-    padding: 16,
-    borderRadius: 12,
+    backgroundColor: tema.colores.acento,
+    borderRadius: tema.radios.medio,
+    paddingVertical: 16,
+    flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 8,
+    justifyContent: 'center',
+    gap: 8,
+    marginTop: 4,
   },
   presionado: {
-    opacity: 0.8,
+    opacity: 0.86,
+    transform: [{ scale: 0.99 }],
   },
   textoBoton: {
     color: '#fff',
@@ -95,6 +202,7 @@ const styles = StyleSheet.create({
   },
   error: {
     fontSize: 16,
-    color: '#b91c1c',
+    color: tema.colores.peligro,
+    lineHeight: 22,
   },
 });

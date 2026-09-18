@@ -3,6 +3,7 @@ import { Pressable, ScrollView, StyleSheet, Text, TextInput } from 'react-native
 
 import { DondeEstoy } from '@/components/DondeEstoy';
 import { useApp } from '@/context/AppContext';
+import { tema } from '@/constantes/tema';
 
 export default function NotaCarrito() {
   const { nota, setNota } = useApp();
@@ -11,13 +12,14 @@ export default function NotaCarrito() {
   return (
     <ScrollView contentContainerStyle={styles.contenedor} keyboardShouldPersistTaps="handled">
       <Text style={styles.texto}>
-        Escribí una aclaración para la cocina (por ejemplo: “sin sal” o “caliente”).
+        Escribí una aclaración para la cocina (por ejemplo: «sin sal» o «bien caliente»).
       </Text>
       <TextInput
         style={styles.input}
         value={nota}
         onChangeText={setNota}
         placeholder="Ej.: sin sal, sin mayonesa..."
+        placeholderTextColor={tema.colores.textoSuave}
         multiline
         numberOfLines={4}
       />
@@ -31,26 +33,31 @@ export default function NotaCarrito() {
 
 const styles = StyleSheet.create({
   contenedor: {
-    padding: 16,
-    gap: 12,
+    padding: 20,
+    gap: 14,
+    backgroundColor: tema.colores.fondo,
   },
   texto: {
     fontSize: 15,
-    color: '#444',
+    color: tema.colores.textoSuave,
+    lineHeight: 21,
   },
   input: {
+    backgroundColor: tema.colores.superficie,
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 10,
-    padding: 12,
+    borderColor: tema.colores.borde,
+    borderRadius: tema.radios.medio,
+    padding: 14,
     fontSize: 15,
     minHeight: 100,
     textAlignVertical: 'top',
+    color: tema.colores.texto,
+    lineHeight: 22,
   },
   boton: {
-    backgroundColor: '#15803d',
-    padding: 15,
-    borderRadius: 12,
+    backgroundColor: tema.colores.acento,
+    borderRadius: tema.radios.medio,
+    paddingVertical: 15,
     alignItems: 'center',
   },
   textoBoton: {

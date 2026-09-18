@@ -2,6 +2,7 @@ import { useLocalSearchParams } from 'expo-router';
 import { ScrollView, StyleSheet, Text } from 'react-native';
 
 import { DondeEstoy } from '@/components/DondeEstoy';
+import { tema } from '@/constantes/tema';
 
 type Articulo = {
   titulo: string;
@@ -52,25 +53,29 @@ export default function ArticuloAyuda() {
 
 const styles = StyleSheet.create({
   contenedor: {
-    padding: 16,
-    gap: 12,
+    padding: 20,
+    gap: 14,
+    backgroundColor: tema.colores.fondo,
   },
   titulo: {
-    fontSize: 22,
-    fontWeight: '700',
+    fontSize: 24,
+    fontWeight: '800',
+    color: tema.colores.texto,
+    letterSpacing: -0.4,
   },
   cuerpo: {
     fontSize: 15,
-    color: '#444',
+    color: tema.colores.textoSuave,
     lineHeight: 22,
   },
   ruta: {
     fontSize: 13,
-    color: '#888',
+    color: tema.colores.textoSuave,
     fontStyle: 'italic',
   },
   error: {
     fontSize: 16,
-    color: '#b91c1c',
+    color: tema.colores.peligro,
+    lineHeight: 22,
   },
 });

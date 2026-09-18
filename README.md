@@ -108,6 +108,17 @@ Gracias al `anchor: '(tabs)'`, al abrir `comedoripf://categorias/bebidas` (o cua
 
 ---
 
+## Presentación visual y animaciones
+
+- **Paleta minimalista** centralizada en `src/constantes/tema.ts` (fondo `#F5F4F0`, tarjetas blancas, texto `#1C1917`, acento ámbar `#C2410C`); ninguna pantalla tiene colores "hardcodeados".
+- **Imágenes del menú:** cada plato en `src/data/platos.ts` tiene una foto (URL temática vía LoremFlickr, `imagen`) y un emoji de respaldo (`emoji`). El componente `PlatoImagen` muestra la foto con `expo-image` y, si falla la red, cae automáticamente en una tarjeta de color por categoría con el emoji.
+- **Grillas:** menú, búsqueda y categorías muestran los platos en grillas de 2 columnas.
+- **Transiciones de pantalla (Stack/Drawer):** la raíz usa `animation: 'fade'`, los detalles de plato `slide_from_right` y el tab bar `animation: 'fade'`. Antes todo hacía un push genérico.
+- **Animaciones de entrada** con Reanimated (`FadeInDown`, `FadeInUp`, `BounceIn`) en tarjetas, accesos, el turno y la cocina, con pequeños *stagger*.
+- El cabezal (`header`) de cada Stack se estilizó con el fondo del tema, sin sombra y con título en negrita.
+
+---
+
 ## Capturas (entregable G5.3)
 
 > ⚠️ Pendiente de añadir: reemplazar estas líneas por capturas o un video corto de la app corriendo.
